@@ -3,35 +3,30 @@ import { generateId } from "../utils";
 import { booksDatabase } from "../database/database";
 
 export class BookService {
+  createBook(data: CreateBook): Books {
+    const newBooks: Books = {
+      id: generateId(),
+      ...data,
+      createdAt: new Date(),
+      updatedAt: new Date(),
+    };
 
-    createBook(data: CreateBook): Books {
-        const newBooks: Books = {
-            id: generateId(),
-            ...data,
-            createdAt: new Date(),
-            updatedAt: new Date(),
-        };
+    booksDatabase.push(newBooks);
 
-        booksDatabase.push(newBooks);
+    return newBooks;
+  }
 
-        return newBooks;
-    }
+  updateBook(index: number, data: UpdateBook): Books {
+    booksDatabase[index] = {
+      ...booksDatabase[index],
+      ...data,
+      updatedAt: new Date(),
+    };
 
-    updateBook(index: number, data: UpdateBook): Books{
-       
+    return booksDatabase[index];
+  }
 
-        booksDatabase[index] = {
-            ...booksDatabase[index],
-            ...data,
-            updatedAt: new Date(),
-        };
-
-        return booksDatabase[index];
-
-    }
-
-    deleteBook( index:number): void{
-        booksDatabase.splice(index, 1);
-    }
-
+  deleteBook(index: number): void {
+    booksDatabase.splice(index, 1);
+  }
 }
