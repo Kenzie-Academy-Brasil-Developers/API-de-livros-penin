@@ -1,32 +1,52 @@
-import { Books, CreateBook, UpdateBook } from "../interfaces/books.interfaces";
+import { Book, createBook, updateBook } from "../interfaces/books.interfaces";
 import { generateId } from "../utils";
 import { booksDatabase } from "../database/database";
 
-export class BookService {
-  createBook(data: CreateBook): Books {
-    const newBooks: Books = {
+export class BookServices {
+  static createBook = (name: string, pages: string, category?: string) => {
+    const newBook: Book = {
       id: generateId(),
-      ...data,
+      name: name,
+      pages: Number(pages),
+      category: category,
       createdAt: new Date(),
       updatedAt: new Date(),
     };
+    booksDatabase.push(newBook);
+    return newBook;
+  };
 
-    booksDatabase.push(newBooks);
-
-    return newBooks;
+ static getBook(id: string) {
+    const getSingleBook = booksDatabase.find(
+      (product) => product.id === Number(id)
+    );
+    return getSingleBook;
   }
 
-  updateBook(index: number, data: UpdateBook): Books {
-    booksDatabase[index] = {
+ static getBooks = (query?: string | undefined) => {
+    if (query) {
+      return booksDatabase.filter((book) =>
+        book.name.toLowerCase().includes(query.toLowerCase())
+      );
+    }
+    return booksDatabase;
+  };
+
+  static updateBook = (id: string, body?: updateBook): Book => {
+    const index = booksDatabase.findIndex((book)=> book.id === Number(id));
+
+    const upBookNew: Book = {
       ...booksDatabase[index],
-      ...data,
-      updatedAt: new Date(),
-    };
+      ...body,
+      updatedAt: new Date()
+    }
 
-    return booksDatabase[index];
-  }
+    booksDatabase.splice(index, 1, upBookNew)
+    return upBookNew;
+  };
 
-  deleteBook(index: number): void {
-    booksDatabase.splice(index, 1);
+ static deleteBook = (id: string) => {
+    const index = booksDatabase.findIndex((book) => book.id === Number(id));
+    return booksDatabase.splice(index, 1)
   }
 }

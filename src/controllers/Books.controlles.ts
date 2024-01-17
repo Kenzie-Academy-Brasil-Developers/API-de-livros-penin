@@ -1,35 +1,27 @@
 import { Request, Response } from "express";
-import { booksDatabase } from "../database/database";
-import { BookService } from "../services/Books.services";
+import { BookServices } from "../services/Books.services";
+
 
 export class BookControllers {
-  private bookService = new BookService();
-
-  createBook = (req: Request, res: Response): Response => {
-    return res.status(201).json(this.bookService.createBook(req.body));
-  };
-
-  getBooks(req: Request, res: Response): Response {
-    return res.status(200).json(booksDatabase);
+  static getBooks(request: Request, response: Response) : Response {
+    const findBooks = request.query.search as string | undefined;
+    const books = BookServices.getBooks(findBooks);
+    return response.status(200).json(books);
   }
 
-  retriveBook(req: Request, res: Response): Response {
-    const index = res.locals.bookIndex;
-
-    return res.status(200).json(booksDatabase[index]);
+  static getBook(request:Request, response: Response) : Response {
+    return response.status(200).json(BookServices.getBook(request.params.id));
   }
 
-  updateBook = (req: Request, res: Response): Response => {
-    const index = res.locals.bookIndex;
+  static createBook(request:Request, response: Response) : Response {
+    const reqBook = request.body;
+    return response.status(201).json(BookServices.createBook(reqBook.name,reqBook.pages, reqBook.category));
+  }
 
-    return res.status(200).json(this.bookService.updateBook(index, req.body));
-  };
-
-  deleteBook = (req: Request, res: Response): Response => {
-    const index = res.locals.bookIndex;
-
-    this.bookService.deleteBook(index);
-
-    return res.status(204).send();
-  };
+  static updateBook(request: Request, response: Response) : Response {
+    return response.status(200).json(BookServices.updateBook(request.params.id,request.body))
+  }
+  static deleteBook (request: Request, response: Response) : Response {
+    return response.status(204).json(BookServices.deleteBook(request.params.id));
+  }
 }

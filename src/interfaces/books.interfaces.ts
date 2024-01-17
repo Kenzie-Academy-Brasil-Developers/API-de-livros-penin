@@ -1,14 +1,16 @@
-interface Books {
-  id: number;
-  name: string;
-  pages: number;
-  category: Text;
-  createdAt: Date;
-  updatedAt: Date;
+import { AnyZodObject, z } from "zod";
+import { 
+  bookCreateSchema, 
+  bookSchema, 
+  bookUpdateSchema, 
+} from "../schema/books.schema";
+
+export interface requestSchema {
+  params: AnyZodObject,
+  body: AnyZodObject,
+  query: AnyZodObject,
 }
 
-type CreateBook = Pick<Books, "name" | "pages" | "category">;
-
-type UpdateBook = Partial<CreateBook>;
-
-export { Books, CreateBook, UpdateBook };
+export type Book = z.infer<typeof bookSchema>;
+export type createBook = z.infer<typeof bookCreateSchema>;
+export type updateBook = z.infer<typeof bookUpdateSchema>;
