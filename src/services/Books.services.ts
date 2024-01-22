@@ -16,14 +16,14 @@ export class BookServices {
     return newBook;
   };
 
- static getBook(id: string) {
+  static getBook(id: string) {
     const getSingleBook = booksDatabase.find(
       (product) => product.id === Number(id)
     );
     return getSingleBook;
   }
 
- static getBooks = (query?: string | undefined) => {
+  static getBooks = (query?: string | undefined) => {
     if (query) {
       return booksDatabase.filter((book) =>
         book.name.toLowerCase().includes(query.toLowerCase())
@@ -33,20 +33,20 @@ export class BookServices {
   };
 
   static updateBook = (id: string, body?: updateBook): Book => {
-    const index = booksDatabase.findIndex((book)=> book.id === Number(id));
+    const index = booksDatabase.findIndex((book) => book.id === Number(id));
 
     const upBookNew: Book = {
       ...booksDatabase[index],
       ...body,
-      updatedAt: new Date()
-    }
+      updatedAt: new Date(),
+    };
 
-    booksDatabase.splice(index, 1, upBookNew)
+    booksDatabase.splice(index, 1, upBookNew);
     return upBookNew;
   };
 
- static deleteBook = (id: string) => {
+  static deleteBook = (id: string) => {
     const index = booksDatabase.findIndex((book) => book.id === Number(id));
-    return booksDatabase.splice(index, 1)
-  }
+    return booksDatabase.splice(index, 1);
+  };
 }

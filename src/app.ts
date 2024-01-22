@@ -1,4 +1,4 @@
-import "express-async-errors"
+import "express-async-errors";
 import express, { json } from "express";
 import { booksRouter } from "./Routes/books.routes";
 import { GlobalErrors } from "./errors/error.middleware";

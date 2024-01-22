@@ -18,7 +18,7 @@ export class GlobalErrors {
 
     console.log(err);
 
-    return res.status(500).json({ error: "internal server error."});
+    return res.status(500).json({ error: "internal server error." });
   };
 
   validBody = (schema: AnyZodObject) => {

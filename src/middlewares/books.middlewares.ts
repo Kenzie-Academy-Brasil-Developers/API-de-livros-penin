@@ -31,24 +31,24 @@ export class verifyBookId {
 }
 
 export class validateBody {
-  static execute(schemas: Partial<requestSchema>){
-    return async (request: Request, response: Response, next: NextFunction) =>{
+  static execute(schemas: Partial<requestSchema>) {
+    return async (request: Request, response: Response, next: NextFunction) => {
       try {
-        if(schemas.params){
-          request.params = await schemas.params.parseAsync(request.params)
+        if (schemas.params) {
+          request.params = await schemas.params.parseAsync(request.params);
         }
-        if(schemas.body){
-          request.body = await schemas.body.parseAsync(request.body)
+        if (schemas.body) {
+          request.body = await schemas.body.parseAsync(request.body);
         }
-        if(schemas.query){
-          request.query = await schemas.query.parseAsync(request.query)
+        if (schemas.query) {
+          request.query = await schemas.query.parseAsync(request.query);
         }
         return next();
       } catch (error) {
-        if (error instanceof ZodError){
+        if (error instanceof ZodError) {
           return response.status(409).json(error);
         }
       }
-    }
+    };
   }
 }
